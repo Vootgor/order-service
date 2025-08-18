@@ -1,23 +1,16 @@
 package com.bikebuilder.orderservice.adapter.out.persistence;
 
-import com.bikebuilder.orderservice.domain.OrderStatus;
-import jakarta.persistence.CascadeType;
+import com.bikebuilder.orderservice.domain.model.OrderItem;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,4 +44,24 @@ public class OrderItemEntity {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    public static OrderItemEntity fromDomain(OrderItem item, OrderEntity order) {
+        OrderItemEntity entity = new OrderItemEntity();
+        entity.setOrder(order);
+        entity.setProductId(item.getProductId());
+        entity.setName(item.getTitle());
+        entity.setPrice(item.getPrice());
+        entity.setQuantity(item.getQuantity());
+        return entity;
+    }
+
+    public OrderItem toOrderItem() {
+        return OrderItem.builder()
+            .id(this.id)
+            .productId(this.productId)
+            .title(this.name)
+            .price(this.price)
+            .quantity(this.quantity)
+            .build();
+    }
 }

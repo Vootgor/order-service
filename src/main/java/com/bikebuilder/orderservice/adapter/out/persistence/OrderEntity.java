@@ -1,6 +1,8 @@
 package com.bikebuilder.orderservice.adapter.out.persistence;
 
-import com.bikebuilder.orderservice.domain.OrderStatus;
+import com.bikebuilder.orderservice.domain.enums.OrderStatus;
+import com.bikebuilder.orderservice.domain.model.Order;
+import com.bikebuilder.orderservice.domain.model.OrderItem;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,6 +15,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -49,4 +52,39 @@ public class OrderEntity {
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItemEntity> items;
+
+    public static OrderEntity create(Order order) {
+        OrderEntity entity = new OrderEntity(
+            null,
+            order.getUserId(),
+            order.getStatus(),
+            order.getTotalAmount(),
+            order.getCreated() != null ? order.getCreated() : Instant.now(),
+            order.getUpdated(),
+            new ArrayList<>()
+        );
+
+        List<OrderItemEntity> itemEntities = order.getItems().stream()
+            .map(item -> OrderItemEntity.fromDomain(item, entity))
+            .toList();
+        entity.setItems(itemEntities);
+
+        return entity;
+    }
+
+    public Order toOrder() {
+        List<OrderItem> domainItems = items.stream()
+            .map(OrderItemEntity::toOrderItem)
+            .toList();
+
+        return Order.builder()
+            .id(id)
+            .userId(userId)
+            .status(orderStatus)
+            .totalAmount(totalAmount)
+            .created(created)
+            .updated(updated)
+            .items(domainItems)
+            .build();
+    }
 }
