@@ -1,4 +1,4 @@
-package com.bikebuilder.orderservice.domain;
+package com.bikebuilder.orderservice.domain.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
