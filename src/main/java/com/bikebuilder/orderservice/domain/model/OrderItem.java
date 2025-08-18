@@ -18,14 +18,14 @@ public class OrderItem {
 
     private UUID id;
     private UUID productId;
-    private String title;
+    private String name;
     private BigDecimal price;
     private Integer quantity;
 
     public static OrderItem parseItemData(OrderItemData data) {
         return OrderItem.builder()
             .productId(data.productId())
-            .title(data.name())
+            .name(data.name())
             .price(data.price())
             .quantity(data.quantity())
             .build();

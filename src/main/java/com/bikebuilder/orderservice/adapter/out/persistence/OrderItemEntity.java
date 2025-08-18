@@ -49,7 +49,7 @@ public class OrderItemEntity {
         OrderItemEntity entity = new OrderItemEntity();
         entity.setOrder(order);
         entity.setProductId(item.getProductId());
-        entity.setName(item.getTitle());
+        entity.setName(item.getName());
         entity.setPrice(item.getPrice());
         entity.setQuantity(item.getQuantity());
         return entity;
@@ -59,7 +59,7 @@ public class OrderItemEntity {
         return OrderItem.builder()
             .id(this.id)
             .productId(this.productId)
-            .title(this.name)
+            .name(this.name)
             .price(this.price)
             .quantity(this.quantity)
             .build();

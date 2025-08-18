@@ -20,16 +20,14 @@ public record OrderCreateRequest(
         @NotBlank Integer quantity
     ) {
 
+        public OrderCreateCommand.OrderItemData toItemData() {
+            return new OrderCreateCommand.OrderItemData(productId, name, price, quantity);
+        }
     }
 
     public OrderCreateCommand toCommand() {
         List<OrderCreateCommand.OrderItemData> commandItems = items.stream()
-            .map(i -> new OrderCreateCommand.OrderItemData(
-                i.productId(),
-                i.name(),
-                i.price(),
-                i.quantity()
-            ))
+            .map(OrderItemRequestDto::toItemData)
             .toList();
         return new OrderCreateCommand(userId, commandItems);
     }
