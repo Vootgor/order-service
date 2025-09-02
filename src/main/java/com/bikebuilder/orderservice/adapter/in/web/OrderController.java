@@ -21,7 +21,6 @@ public class OrderController {
     public OrderResponse createOrder(@RequestBody @Valid OrderCreateRequest request){
         var command = request.toCommand();
         var response = createOrderUseCase.createOrder(command);
-        System.out.println(response.getTotalAmount());
         return OrderResponse.fromOrder(response);
     }
 }
